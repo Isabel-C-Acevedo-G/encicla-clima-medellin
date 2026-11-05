@@ -1,0 +1,12 @@
+﻿Dataset,Problema identificado,Evidencia encontrada,Posible impacto,Acción propuesta
+viajes,Valores faltantes (NaN),"Estacion_Origen (60, 0.28%)",Reduce los registros utilizables y puede sesgar promedios y conteos por clima u hora.,"Decidir por columna si se eliminan filas, se imputan o se dejan, según su importancia para la pregunta."
+viajes,Nulos escondidos en columnas de texto,{'Hora_Inicio': 15},Pandas no los cuenta como nulos y pueden pasar como categorías válidas.,Convertirlos a NaN con replace() antes de analizar.
+clima,Valores faltantes (NaN),"Temperatura_C (149, 6.9%); Tipo_Clima (62, 2.87%)",Reduce los registros utilizables y puede sesgar promedios y conteos por clima u hora.,"Decidir por columna si se eliminan filas, se imputan o se dejan, según su importancia para la pregunta."
+viajes,'Hora_Inicio' no es de tipo fecha (tipo str),pd.to_datetime la interpreta; 15 valores no se pudieron convertir,"No se pueden extraer hora y día de la semana, base de la pregunta analítica.",Convertir 'Hora_Inicio' con pd.to_datetime y crear columnas de hora y día de la semana.
+viajes,Filas completamente duplicadas,"40 de 21,806 filas",Infla el conteo de viajes y distorsiona la demanda por día y hora.,Eliminar duplicados con drop_duplicates() tras confirmar que son errores.
+viajes,Identificadores repetidos en 'ID_Viaje',40 filas con id ya visto,Un mismo viaje podría estar contado más de una vez.,Revisar si son el mismo viaje y conservar un solo registro.
+viajes,Duraciones fuera de rango en 'Duracion_Viaje_Minutos',45 viajes fuera de 1–180 min,Viajes de 0 min o de muchas horas suelen ser errores o bicicletas no devueltas; sesgan el promedio.,Definir un criterio de exclusión y documentarlo.
+clima,Temperaturas fuera de rango en 'Temperatura_C',20 valores fuera de 5–40 °C,Pueden ser errores de sensor o de unidad y alteran el análisis por clima.,Revisar los casos y marcar o descartar los imposibles.
+clima,Categorías de 'Tipo_Clima' escritas de varias formas,7 valores distintos pero 3 reales,Separa en grupos distintos lo que es la misma condición climática.,Normalizar con str.strip().str.lower() y unificar nombres.
+clima,Horas sin registro,48 horas faltantes entre 2026-09-11 16:00:00 y 2026-09-13 15:00:00,No se podrá asignar clima a los viajes de esas horas.,Buscar otra fuente para completar o excluir esos viajes.
+clima,'Fecha_Hora' guardada como texto (str),dtypes muestra str,No se puede cruzar con los viajes por fecha y hora.,Convertir con pd.to_datetime y redondear Hora_Inicio a la hora.
