@@ -3,12 +3,12 @@
 IMPORTANTE: estos datos NO son reales. Se inventan con una semilla fija (siempre salen iguales) y
 se les introducen a propósito problemas de calidad para poder diagnosticarlos:
 
-  viajes_encicla_simulado.csv
+viajes_encicla_simulado.csv
     - 40 filas completamente duplicadas
     - 25 duraciones <= 0 y 20 duraciones mayores a 180 minutos
     - 60 estaciones de origen vacías
     - 15 valores "sin dato" en Hora_Inicio
-  clima_medellin_simulado.csv
+clima_medellin_simulado.csv
     - ~3 % de Tipo_Clima vacío y ~4 % escrito de otras formas ("LLUVIOSO", "lluvioso ")
     - 20 temperaturas con el valor centinela 99.9
     - 150 temperaturas vacías
@@ -49,11 +49,11 @@ temp = temp - np.where(clima == "Lluvioso", 2.5, 0)
 temp = temp.round(1)
 
 df_clima = pd.DataFrame({"Fecha_Hora": horas.strftime("%Y-%m-%d %H:%M:%S"),
-                         "Tipo_Clima": clima, "Temperatura_C": temp})
+                        "Tipo_Clima": clima, "Temperatura_C": temp})
 
 # Viajes: demanda con horas pico, fines de semana y lluvia 
 perfil = np.array([2, 1, 1, 1, 3, 10, 30, 42, 28, 16, 12, 13,
-                   16, 15, 14, 16, 22, 38, 44, 26, 14, 9, 5, 3], dtype=float)
+                16, 15, 14, 16, 22, 38, 44, 26, 14, 9, 5, 3], dtype=float)
 factor_dia = np.where(horas.day_of_week >= 5, 0.6, 1.0)
 factor_clima = np.where(clima == "Lluvioso", 0.55, np.where(clima == "Nublado", 0.9, 1.0))
 lam = perfil[h] * factor_dia * factor_clima * 0.8
